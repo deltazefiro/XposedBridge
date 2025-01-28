@@ -31,7 +31,7 @@ android {
     hiddenapi.afterEvaluate {
         hiddenapi.android.compileSdkVersion compileSdkVersion
         hiddenapi.android.buildToolsVersion buildToolsVersion
-        preBuild.dependsOn hiddenapi.assembleRelease
+        preBuild.dependsOn ":hiddenapistubs:assembleRelease"
         hiddenapi.preBuild << {
             def hiddenapiCompiler = hiddenapi.android.libraryVariants[0].javaCompiler
             def hiddenapiDestPath = hiddenapiCompiler.destinationDir.getAbsolutePath()
@@ -77,9 +77,6 @@ task generateDocs(type: Javadoc, dependsOn: 'compileReleaseSources') {
         // The sources of the Android SDK are added to the sourcepath.
         // This ensures that Javadoc can be inherited properly, but it
         // takes longer and throws a lot of errors (which we ignore here).
-        def sdkSources = file("$android.sdkDirectory/sources/$android.compileSdkVersion")
-        assert sdkSources.exists()
-        addFileOption 'sourcepath', sdkSources
 
         failOnError = false
         addStringOption 'Xmaxwarns', '1'
